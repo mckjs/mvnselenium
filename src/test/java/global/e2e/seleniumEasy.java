@@ -1,122 +1,117 @@
 package global.e2e;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import utils.base;
 import utils.launchingBrowser;
+import utils.dateGenerator;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import static java.lang.Thread.*;
 
 
 public class seleniumEasy extends launchingBrowser {
 
-    @Test(description="Single Input Field")
-    public void single_input_field() throws InterruptedException {
+    @BeforeClass
+    public void navigateToSeleniumWebsite() {
         base utils = new base(driver);
-        pages p = new pages(driver);
+        pages pageTest = new pages(driver);
+        pageTest.goToSeleniumEasy();
 
-        p.goToSeleniumEasy();
-        utils.scrolldown(p.btnStartPractising);
+        utils.scrolldown(pageTest.btnStartPractising);
+        utils.assertEquals(pageTest.btnStartPractising, "Start Practising");
+        utils.click(pageTest.btnStartPractising);
 
-        utils.assertEquals(p.btnStartPractising, "Start Practising");
+        utils.scrolldown(pageTest.btnProceedNext);
+    }
 
-        utils.click(p.btnStartPractising);
+    @Test(description="Verify user is able to make use of the Show Message")
+    public void single_input_field() {
+        base utils = new base(driver);
+        pages pageTest = new pages(driver);
 
-        utils.scrolldown(p.btnProceedNext);
-        utils.click(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[1]/a"));
-        utils.click(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[1]/ul/li[1]/a"));
-        utils.assertEquals(By.xpath("//*[@id=\"easycont\"]/div/div[2]/h3"), "This would be your first example to start with Selenium.");
+
+        utils.assertIsDisplayed(pageTest.linkInputForms);
+        utils.click(pageTest.linkInputForms);
+        utils.assertIsDisplayed(pageTest.linkSimpleFormDemo);
+        utils.click(pageTest.linkSimpleFormDemo);
+        utils.assertEquals(pageTest.pageName, "This would be your first example to start with Selenium.");
 
         /*Set input field*/
-        utils.assertIsDisplayed(By.id("user-message"));
+        utils.assertIsDisplayed(pageTest.inputYourMessage);
         String sentence = "Hi there, this value is entered using automation tool";
-        utils.writeText(By.id("user-message"), sentence);
+        utils.writeText(pageTest.inputYourMessage, sentence);
 
-       utils.click(By.xpath("//*[@id=\"get-input\"]/button"));
-       utils.assertEquals(By.id("display"), sentence);
+        utils.scrolldown(pageTest.btnShowMessage);
+        utils.click(pageTest.btnShowMessage);
+        utils.assertEquals(pageTest.displayShowMessage, sentence);
     }
-    @Test(description="Two Input Field")
+   @Test(description="Verify user is able to add sum1 and sum2 and get the correct total")
     public void two_input_fields() throws InterruptedException {
         base utils = new base(driver);
-        pages p = new pages(driver);
+        pages pageTest = new pages(driver);
 
-        p.goToSeleniumEasy();
-        utils.scrolldown(p.btnStartPractising);
-
-        utils.assertEquals(p.btnStartPractising, "Start Practising");
-
-        utils.click(p.btnStartPractising);
-
-        utils.scrolldown(p.btnProceedNext);
-        utils.click(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[1]/a"));
-        utils.click(By.xpath("//*[@id=\"treemenu\"]/li/ul/li[1]/ul/li[1]/a"));
-        utils.assertEquals(By.xpath("//*[@id=\"easycont\"]/div/div[2]/h3"), "This would be your first example to start with Selenium.");
+       utils.assertIsDisplayed(pageTest.linkInputForms);
+       utils.click(pageTest.linkInputForms);
+       utils.assertIsDisplayed(pageTest.linkSimpleFormDemo);
+       utils.click(pageTest.linkSimpleFormDemo);
+       utils.assertEquals(pageTest.pageName, "This would be your first example to start with Selenium.");
 
         /*Set input field*/
-        utils.assertIsDisplayed(By.id("user-message"));
+        utils.assertIsDisplayed(pageTest.inputYourMessage);
         Integer sum1 = 2500;
         Integer sum2 = 500;
-        utils.writeInt(By.id("sum1"), sum1);
-        utils.writeInt(By.id("sum2"), sum2);
+        utils.writeInt(pageTest.inputSum1, sum1);
+        utils.writeInt(pageTest.inputSum2, sum2);
 
         Integer total = sum1 + sum2;
         String totalValue = total.toString();
 
-        utils.click(By.xpath("//*[@id=\"gettotal\"]/button"));
-        utils.assertEquals(By.id("displayvalue"), totalValue);
+        utils.click(pageTest.btnCalculate);
+        utils.assertEquals(pageTest.displayTotal, totalValue);
     }
 
-    @Test(description = "Date pickers")
+    @Test(description = "Verify user can select today date")
     public void date_example() throws InterruptedException {
         base utils = new base(driver);
-        pages p = new pages(driver);
+        pages pageTest = new pages(driver);
 
-        p.goToSeleniumEasy();
-        utils.click(By.xpath(" //*[@id=\"treemenu\"]/li/ul/li[2]/a"));
-        utils.click((By.xpath("//*[@id=\"treemenu\"]/li/ul/li[2]/ul/li[1]/a")));
-        utils.assertEquals(By.xpath("/html/body/div[2]/div/div[2]/h1"), "Bootstrap Date Pickers Example");
-        utils.click(By.xpath("//*[@id=\"sandbox-container1\"]/div/span/i"));
-        /*Select date*/
-        utils.click(By.xpath("/html/body/div[3]/div[1]/table/tfoot/tr[1]/th"));
-    }
+        utils.assertIsDisplayed(pageTest.linkInputForms);
+        utils.assertIsDisplayed(pageTest.linkDatePickers);
+        utils.click(pageTest.linkDatePickers);
+        utils.assertIsDisplayed(pageTest.linkBootstrapDatePickers);
+        utils.click(pageTest.linkBootstrapDatePickers);
+        utils.assertEquals(pageTest.titlePageDatePicker, "Bootstrap Date Pickers Example");
+        utils.click(pageTest.dateIcon);
+        utils.assertIsDisplayed(pageTest.dateCalendar);
 
-    @Test(description = "Date Range Example")
-    public void date_range() throws InterruptedException {
-        base utils = new base(driver);
-        pages p = new pages(driver);
-
-        p.goToSeleniumEasy();
-        utils.click(By.xpath(" //*[@id=\"treemenu\"]/li/ul/li[2]/a"));
-        utils.click((By.xpath("//*[@id=\"treemenu\"]/li/ul/li[2]/ul/li[1]/a")));
-        utils.assertEquals(By.xpath("/html/body/div[2]/div/div[2]/h1"), "Bootstrap Date Pickers Example");
-        utils.writeText(By.xpath("//*[@id=\"datepicker\"]/input[1]"), "04/02/2019");
-        sleep(1000);
-        utils.writeText(By.xpath("//*[@id=\"datepicker\"]/input[2]"), "28/02/2019");
-        /*https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html*/
+        utils.click(pageTest.todayDate);
+        Thread.sleep(1000);
+       /*
+       "Value does not get saved in html css"
+            dateGenerator dg = new dateGenerator();
+            String todayDate = dg.setTodayDate();
+            System.out.print(">>>>>" + utils.readText(pageTest.formControlDate));
+            String currentDate = utils.readText(pageTest.formControlDate);
+            utils.assertTextValues(currentDate, todayDate);
+        */
 
     }
-    @Test(description = "Tables")
+    @Test(description = "Verify that the jQuery library is in the list")
     public void table_data_search() throws InterruptedException {
         base utils = new base(driver);
-        pages p = new pages(driver);
+        pages pageTest = new pages(driver);
+        utils.assertIsDisplayed(pageTest.linkTable);
+        utils.click(pageTest.linkTable);
+        utils.click(pageTest.linkTableDataSearch);
 
-        p.goToSeleniumEasy();
-        utils.click(By.xpath(" //*[@id=\"treemenu\"]/li/ul/li[2]/a"));
-        utils.click((By.xpath("//*[@id=\"treemenu\"]/li/ul/li[2]/ul/li[1]/a")));
-        utils.assertEquals(By.xpath("/html/body/div[2]/div/div[2]/h1"), "Bootstrap Date Pickers Example");
-        utils.writeText(By.xpath("//*[@id=\"datepicker\"]/input[1]"), "04/02/2019");
-        sleep(1000);
-        utils.writeText(By.xpath("//*[@id=\"datepicker\"]/input[2]"), "28/02/2019");
-        /*https://www.seleniumeasy.com/test/bootstrap-date-picker-demo.html*/
+        utils.assertEquals(pageTest.titlePageTable, "Type in your search to filter data by Tasks / Assignee / Status");
+
+        utils.assertValueInList(pageTest.tableRow, "5 jQuery library Holden Charles deployed");
+
 
     }
 }

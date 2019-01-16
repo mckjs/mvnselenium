@@ -1,5 +1,6 @@
 package utils;
 
+import junit.framework.AssertionFailedError;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class base {
@@ -21,8 +23,17 @@ public class base {
         wait = new WebDriverWait(driver,15);
     }
 
+    public void scrolldown(By elementBy){
+        WebElement element = driver.findElement(elementBy);
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element);
+        actions.perform();
+
+    }
+
     //Wait Wrapper Method
     public void waitVisibility(By elementBy) {
+        this.scrolldown(elementBy);
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(elementBy));
     }
 
@@ -89,6 +100,7 @@ public class base {
     }
 
     public void assertIsDisplayed(By elementBy) {
+        this.scrolldown(elementBy);
         Assert.assertTrue(driver.findElement(elementBy).isDisplayed(), "Element is not displayed " + elementBy);
     }
     public void assertIsNotDisplayed(By elementBy){
@@ -106,13 +118,54 @@ public class base {
         Assert.assertEquals(driver.findElement(elementBy).getSize(), length);
 
     }
-    public void scrolldown(By elementBy){
-    WebElement element = driver.findElement(elementBy);
-        Actions actions = new Actions(driver);
-        actions.moveToElement(element);
-        actions.perform();
+
+    public void assertFailTest() {
+        Assert.fail("Test did not execute probably");
 
     }
+
+
+    /*Other methods*/
+    public void findValueClick (By elementBy, String expectedText) {
+        List<WebElement> listElements = driver.findElements(elementBy);
+
+        for (int i = 0; i < listElements.size(); i++){
+            WebElement listElement = listElements.get(i);
+            String elementValue = listElement.getText();
+            if(elementValue.equals(expectedText)){
+                System.out.print(">>>>> : >>>>>" + i);
+                listElement.click();
+
+            }
+        }
+
+    }
+
+
+    public void assertValueInList (By elementBy, String expectedText) {
+        List<WebElement> listElements = driver.findElements(elementBy);
+        List<String> value = new ArrayList<String>();
+
+        for (int i = 0; i < listElements.size(); i++){
+            WebElement listElement = listElements.get(i);
+            String elementValue = listElement.getText();
+            if(elementValue.equals(expectedText)){
+
+                value.add(elementValue);
+            }
+        }
+
+        Integer lengthValue = value.size();
+        if (lengthValue <= 0){
+            this.assertFailTest();
+        }else if (lengthValue > 1){
+            this.assertFailTest();
+        }else{
+            assertTextValues(expectedText, value.get(0));
+        }
+
+    }
+
 
 
 }

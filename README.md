@@ -2,6 +2,7 @@
 ### Tech
 - maven
 - selenium webdriver
+- Java
 
 ### How to run test
 ```sh
@@ -15,12 +16,11 @@ Under mvnselenium\target\surefire-reports\AllTestsSuite\Front end automation.htm
 Right click on file, open in browser. This will you show the results of the tests
 
 ### Tests Cases
-- date_example
-- date_range
+
 - single_input_field
 - table_data-search
 - two-input-fields
-
-
+- date_example
+- date_range
 
 
