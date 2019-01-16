@@ -17,10 +17,9 @@ Right click on file, open in browser. This will you show the results of the test
 
 ### Tests Cases
 
-- single_input_field
-- table_data-search
-- two-input-fields
-- date_example
-- date_range
+- Verify user can select today date	
+- Verify user is able to make use of the Show Message
+- Verify that the jQuery library is in the list
+- Verify user is able to add sum1 and sum2 and get the correct total
 
 
