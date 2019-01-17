@@ -4,6 +4,8 @@
 - selenium webdriver
 - Java
 
+### Dependencies
+- You need to install [maven](https://maven.apache.org/install.html) before executing the test 
 ### How to run test
 ```sh
 $ git clone https://github.com/mckjs/mvnselenium.git
