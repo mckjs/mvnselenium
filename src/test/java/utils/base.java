@@ -17,13 +17,14 @@ public class base {
     public WebDriver driver;
     public WebDriverWait wait;
 
+
     //Constructor
-    public base (WebDriver driver){
+    public base(WebDriver driver) {
         this.driver = driver;
-        wait = new WebDriverWait(driver,15);
+        wait = new WebDriverWait(driver, 15);
     }
 
-    public void scrolldown(By elementBy){
+    public void scrolldown(By elementBy) {
         WebElement element = driver.findElement(elementBy);
         Actions actions = new Actions(driver);
         actions.moveToElement(element);
@@ -35,6 +36,8 @@ public class base {
     public void waitVisibility(By elementBy) {
         this.scrolldown(elementBy);
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(elementBy));
+        /*this.wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(elementBy));*/
+
     }
 
     //Wait Wrapper Method
@@ -48,54 +51,57 @@ public class base {
     }
 
     //Click Method
-    public void click (By elementBy) {
-        scrolldown(elementBy);
+    public void click(By elementBy) {
+        this.scrolldown(elementBy);
         waitClickable(elementBy);
         waitVisibility(elementBy);
         driver.findElement(elementBy).click();
     }
 
     //Write Text
-    public void writeText (By elementBy, String text) {
+    public void writeText(By elementBy, String text) {
+        this.scrolldown(elementBy);
         waitVisibility(elementBy);
         driver.findElement(elementBy).sendKeys(text);
     }
 
     public void writeInt(By elementBy, Integer value) {
-       String text = value.toString();
+        String text = value.toString();
         waitVisibility(elementBy);
         driver.findElement(elementBy).sendKeys(text);
     }
 
     //Read Text
-    public String readText (By elementBy) {
+    public String readText(By elementBy) {
         waitVisibility(elementBy);
         return driver.findElement(elementBy).getText();
     }
 
     //Assert
-    public void waitTextToBe (By elementBy, String expectedText) {
+    /*public void waitTextToBe (By elementBy, String expectedText) {
         waitVisibility(elementBy);
         wait.until(ExpectedConditions.textToBe(elementBy, expectedText));
-    }
+    }*/
 
-    public String getAttribute(By elementBy, String text){
+    public String getAttribute(By elementBy, String text) {
         String value = driver.findElement(elementBy).getAttribute(text);
         return value;
     }
 
     //Assert
-    public void assertEquals (By elementBy, String expectedText) {
+    public void assertEquals(By elementBy, String expectedText) {
+        this.scrolldown(elementBy);
         waitVisibility(elementBy);
         Assert.assertEquals(readText(elementBy), expectedText);
     }
+
     //Assert
-    public void assertWebElementEquals (WebElement elementBy, String expectedText) {
+    public void assertWebElementEquals(WebElement elementBy, String expectedText) {
         Assert.assertEquals(elementBy.getText(), expectedText);
     }
 
     //Assert
-    public void assertTextValues (String actualText, String expectedText) {
+    public void assertTextValues(String actualText, String expectedText) {
         Assert.assertEquals(actualText, expectedText);
     }
 
@@ -103,9 +109,11 @@ public class base {
         this.scrolldown(elementBy);
         Assert.assertTrue(driver.findElement(elementBy).isDisplayed(), "Element is not displayed " + elementBy);
     }
-    public void assertIsNotDisplayed(By elementBy){
+
+    public void assertIsNotDisplayed(By elementBy) {
         Assert.assertFalse(driver.findElement(elementBy).isDisplayed());
     }
+
     public void assertIsSelected(By elementBy) {
         Assert.assertTrue(driver.findElement(elementBy).isSelected());
     }
@@ -124,15 +132,20 @@ public class base {
 
     }
 
+    public void assertTextContains(String sActual, String sExpectedText) {
+        Assert.assertTrue(sActual.contains(sExpectedText));
+
+    }
+
 
     /*Other methods*/
-    public void findValueClick (By elementBy, String expectedText) {
+    public void findValueClick(By elementBy, String expectedText) {
         List<WebElement> listElements = driver.findElements(elementBy);
 
-        for (int i = 0; i < listElements.size(); i++){
+        for (int i = 0; i < listElements.size(); i++) {
             WebElement listElement = listElements.get(i);
             String elementValue = listElement.getText();
-            if(elementValue.equals(expectedText)){
+            if (elementValue.equals(expectedText)) {
                 System.out.print(">>>>> : >>>>>" + i);
                 listElement.click();
 
@@ -142,30 +155,34 @@ public class base {
     }
 
 
-    public void assertValueInList (By elementBy, String expectedText) {
+    public void assertValueInList(By elementBy, String expectedText) {
         List<WebElement> listElements = driver.findElements(elementBy);
         List<String> value = new ArrayList<String>();
 
-        for (int i = 0; i < listElements.size(); i++){
+        for (int i = 0; i < listElements.size(); i++) {
             WebElement listElement = listElements.get(i);
             String elementValue = listElement.getText();
-            if(elementValue.equals(expectedText)){
-
+            if (elementValue.equals(expectedText)) {
+                /*System.out.print(">>>>>>.. " + expectedText);*/
                 value.add(elementValue);
             }
         }
 
         Integer lengthValue = value.size();
-        if (lengthValue <= 0){
+        /*System.out.print(">>>lengthValue>>>.. " + lengthValue);*/
+        if (lengthValue <= 0) {
             this.assertFailTest();
-        }else if (lengthValue > 1){
+        } else if (lengthValue > 1) {
             this.assertFailTest();
-        }else{
+        } else {
             assertTextValues(expectedText, value.get(0));
         }
 
     }
 
 
-
+    public void assertCurrentUrlContainsText(String sExpectedText) {
+        String sCurrentUrl = driver.getCurrentUrl();
+        assertTextContains(sCurrentUrl, sExpectedText);
+    }
 }

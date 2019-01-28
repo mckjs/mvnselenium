@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="AllTestsSuite">
-
-    <test name="Front end automation">
+<suite name="AllTestsSuite" >
+     <test name="Chrome : Front end automation">
+         <parameter name="browser" value="Chrome"/>
         <classes>
-            <class name="global.e2e.seleniumEasy"/>
+            <class name="global.e2e.iLabWebsite.careers"/>
+            <class name="global.e2e.seleniumEasy.seleniumEasy"/>
         </classes>
     </test>
+    <!--<test name="Firefox : Front end automation">
+        <parameter name="browser" value="Firefox"/>
+        <classes>
+            <class name="global.e2e.iLabWebsite.careers"/>
+            <class name="global.e2e.seleniumEasy.seleniumEasy"/>
+        </classes>
+    </test>-->
 </suite>
